@@ -1,24 +1,19 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
-
 
 from astropy.io import fits
-from PSD_PATH import *
+# from PSD_PATH import * # WHEN THE KIC FILE IS DOWNLOADED, GET RID OF THIS
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import math
 import pickle as pickle 
 import bokeh 
-from echelle import plot_echelle
-from echelle import interact_echelle
-import csv
+#from echelle import plot_echelle
+#from echelle import interact_echelle
+#import csv
 from skimage.transform import rescale, resize
-
-
-# In[3]:
 
 
 # 400
@@ -26,11 +21,7 @@ rep_hundreds = "/Users/kanahsmith/Dropbox (Simons Foundation)/INTERNSHIP2022/DAT
 path_hundreds = PSD_PATH_IN_REPERTORY(rep_hundreds)
 
 
-# In[4]:
-
-
 # collecting the data for all 40 fits files
-
 def kepler_data(num_files, path): # where num_files = 40, path = path_data
     stellar = []
     for num in range(num_files):
@@ -47,23 +38,11 @@ def kepler_data(num_files, path): # where num_files = 40, path = path_data
         stellar.append((freq, power, KIC))
     return stellar
 
-
-# In[5]:
-
-
 all_kepler = kepler_data(len(path_hundreds), path_hundreds)
-
-
-# In[7]:
-
 
 CORRECTED_PATH_TO_FILE = "/Users/kanahsmith/Dropbox (Simons Foundation)/INTERNSHIP2022/DATA/"
 with open(CORRECTED_PATH_TO_FILE+"eps_dnu_with_espilon_corrected.pkl", "rb") as g: # epsilon is misspelt on purpose
     epsilon, del_nu, KIC, numax = pickle.load(g) 
-
-
-# In[8]:
-
 
 eps_kic = []
 delnu_kic = []
@@ -73,10 +52,6 @@ for num in range(len(epsilon)):
     eps_kic.append((epsilon[num], KIC[num]))
     delnu_kic.append((del_nu[num], KIC[num]))
     numax_kic.append((numax[num], KIC[num]))
-
-
-# In[9]:
-
 
 spec_kepler = []
 for num in range(len(all_kepler)):
@@ -116,16 +91,10 @@ for num in range(len(spec_kepler)):
 # where both slices are done with 5*delta nu
             
 
+#np.shape(spec_kepler)
+# SPEC_KEPLER NEEDS TO BE SAVED TO MY COMPUTER ------ DONE
 
-# In[25]:
-
-
-np.shape(spec_kepler)
-# SPEC_KEPLER NEEDS TO BE SAVED TO MY COMPUTER
-
-
-# In[11]:
-
+------------------------------------------------- WANT TO START FROM HERE -------------------------------------------
 
 def create_echelle_diagram(power, freq, dnu, numax, epsilon, min_interval, max_interval):
     """
@@ -162,9 +131,6 @@ def create_echelle_diagram(power, freq, dnu, numax, epsilon, min_interval, max_i
     return Z
 
 
-# In[13]:
-
-
 for num in range(len(spec_kepler)):
     fig = plt.figure(figsize = (15,10))
     
@@ -183,15 +149,8 @@ for num in range(len(spec_kepler)):
     plt.ylabel('Frequency ($\mu$Hz)', size = 35)
     plt.xlabel('Frequency [$\Delta \\nu$] ($\mu$Hz)', size = 35)
 
-    path_save = "/Users/kanahsmith/Documents/astero/echelle_plasma/"
+    #path_save = "/Users/kanahsmith/Documents/astero/echelle_plasma/" # THIS PATH NEEDS TO CHANGE TO SUNNYVALE CLUSTER
     img_name = "KIC_{}.png".format(KIC_ech)
     plt.savefig(path_save+img_name, dpi = 800)
     plt.close(fig)
     
-
-
-# In[ ]:
-
-
-
-
